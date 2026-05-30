@@ -1,0 +1,320 @@
+===========================================================================
+  ОТЧЁТ: Гибридная рекомендательная система (MovieLens 1M)
+  Дата: 2026-03-14 17:27:50
+  Файл отчёта: hybrid_report.txt
+===========================================================================
+
+Библиотеки импортированы.
+Датасет уже скачан.
+Ratings: 1000209 записей
+Movies:  3883 фильмов
+Users:   6040 пользователей
+
+===========================================================================
+  СТРУКТУРА И СТАТИСТИКА ДАННЫХ
+===========================================================================
+
+--- ratings.describe() ---
+             userId       movieId        rating     timestamp
+count  1.000209e+06  1.000209e+06  1.000209e+06  1.000209e+06
+mean   3.024512e+03  1.865540e+03  3.581564e+00  9.722437e+08
+std    1.728413e+03  1.096041e+03  1.117102e+00  1.215256e+07
+min    1.000000e+00  1.000000e+00  1.000000e+00  9.567039e+08
+25%    1.506000e+03  1.030000e+03  3.000000e+00  9.653026e+08
+50%    3.070000e+03  1.835000e+03  4.000000e+00  9.730180e+08
+75%    4.476000e+03  2.770000e+03  4.000000e+00  9.752209e+08
+max    6.040000e+03  3.952000e+03  5.000000e+00  1.046455e+09
+
+Пропуски: 0
+
+Уникальных пользователей: 6040
+Уникальных фильмов:       3706
+Всего оценок:              1000209
+Разреженность матрицы:     95.53%
+Средняя оценка:            3.582
+Медиана оценок:            4.0
+
+Распределение оценок:
+  1.0:   56174 ( 5.62%) █████
+  2.0:  107557 (10.75%) ██████████
+  3.0:  261197 (26.11%) ██████████████████████████
+  4.0:  348971 (34.89%) ██████████████████████████████████
+  5.0:  226310 (22.63%) ██████████████████████
+
+Оценок на пользователя:
+  min=20, median=96, mean=165.6, max=2314
+Оценок на фильм:
+  min=1, median=124, mean=269.9, max=3428
+
+Топ-10 самых оценённых фильмов:
+   3428 оценок | ср. 4.32 | American Beauty (1999)
+   2991 оценок | ср. 4.45 | Star Wars: Episode IV - A New Hope (1977)
+   2990 оценок | ср. 4.29 | Star Wars: Episode V - The Empire Strikes Back (1980)
+   2883 оценок | ср. 4.02 | Star Wars: Episode VI - Return of the Jedi (1983)
+   2672 оценок | ср. 3.76 | Jurassic Park (1993)
+   2653 оценок | ср. 4.34 | Saving Private Ryan (1998)
+   2649 оценок | ср. 4.06 | Terminator 2: Judgment Day (1991)
+   2590 оценок | ср. 4.32 | Matrix, The (1999)
+   2583 оценок | ср. 3.99 | Back to the Future (1985)
+   2578 оценок | ср. 4.35 | Silence of the Lambs, The (1991)
+
+Всего жанров: 18
+Жанры: Action, Adventure, Animation, Children's, Comedy, Crime, Documentary, Drama, Fantasy, Film-Noir, Horror, Musical, Mystery, Romance, Sci-Fi, Thriller, War, Western
+
+===========================================================================
+  ГИПЕРПАРАМЕТРЫ
+===========================================================================
+  K_NEIGHBORS_UB            = 20
+  K_NEIGHBORS_IB            = 50
+  TOP_X                     = 10
+  TEST_SIZE                 = 0.2
+  RATING_THRESHOLD          = 3.5
+  MIN_RATINGS_USER          = 20
+  MIN_RATINGS_ITEM          = 10
+  EVAL_SAMPLE               = 500
+  ALPHA                     = 0.7
+  INTERSECTION_BOOST        = 1.5
+  POPULARITY_PENALTY        = 0.02
+  DIVERSITY_RERANK          = False
+
+===========================================================================
+  ПРЕДОБРАБОТКА
+===========================================================================
+После фильтрации: 998539 оценок, 6040 users, 3260 items
+Train: 796389 | Test: 202150
+Соотношение: 20.24% в тесте
+
+User-Item матрица: (6040, 3260)
+Ненулевых: 796389 (4.0446%)
+Пользователей с релевантными тестовыми фильмами: 6023
+Пользователей для оценки: 500
+Метрики определены.
+
+===========================================================================
+  ОБУЧЕНИЕ БАЗОВЫХ МОДЕЛЕЙ
+===========================================================================
+Обучение Item-Based KNN...
+Обучение User-Based KNN...
+Базовые модели готовы.
+
+###########################################################################
+#  ГИБРИДНАЯ РЕКОМЕНДАТЕЛЬНАЯ СИСТЕМА
+###########################################################################
+Гибридная модель определена.
+
+===========================================================================
+  ДЕМОНСТРАЦИЯ НА КОНКРЕТНЫХ ПОЛЬЗОВАТЕЛЯХ
+===========================================================================
+
+───────────────────────────────────────────────────────────────────────────
+  ПОЛЬЗОВАТЕЛЬ 1996
+───────────────────────────────────────────────────────────────────────────
+
+  Высоко оцененные фильмы (train):
+    ★ 5  Godfather, The (1972)  [Action|Crime|Drama]
+    ★ 5  Boy Who Could Fly, The (1986)  [Drama|Fantasy]
+    ★ 5  Indian in the Cupboard, The (1995)  [Adventure|Children's|Fantasy]
+    ★ 5  Raising Arizona (1987)  [Comedy]
+    ★ 5  Face/Off (1997)  [Action|Sci-Fi|Thriller]
+
+  Релевантные в тесте (29 шт):
+    ✓ Toy Story (1995)
+    ✓ Heat (1995)
+    ✓ Die Hard (1988)
+    ✓ James and the Giant Peach (1996)
+    ✓ Fly, The (1986)
+
+   №  User-Based                | Item-Based                | Гибрид                   
+  ──  ───────────────────────── | ───────────────────────── | ─────────────────────────
+   1   Sunset Blvd. (a.k.a. Su  |  Borrowers, The (1997)    |  No Way Out (1987)       
+   2   Lawrence of Arabia (196  |  Mouse Hunt (1997)        |  Sunset Blvd. (a.k.a. Su 
+   3   Manchurian Candidate, T  |  Fly Away Home (1996)     |  Third Man, The (1949)   
+   4   Seven Samurai (The Magn  |  Raging Bull (1980)       |  Rear Window (1954)      
+   5   Perfect Blue (1997)      |  Do the Right Thing (198  |  Scent of a Woman (1992) 
+   6   Man on the Moon (1999)   |  North by Northwest (195  |  Stalag 17 (1953)        
+   7   Seven Days in May (1964  |  Rear Window (1954)       |  Last Picture Show, The  
+   8   Aliens (1986)            |  Network (1976)           |  Lawrence of Arabia (196 
+   9  ✓Saving Private Ryan (19  |  Blue Velvet (1986)       |  Casablanca (1942)       
+  10   Schindler's List (1993)  |  Blood Simple (1984)      |  Bridge on the River Kwa 
+
+  Пересечение UB∩IB: 0 фильмов
+  В гибриде из UB: 2, из IB: 1
+
+───────────────────────────────────────────────────────────────────────────
+  ПОЛЬЗОВАТЕЛЬ 1129
+───────────────────────────────────────────────────────────────────────────
+
+  Высоко оцененные фильмы (train):
+    ★ 5  Titanic (1997)  [Drama|Romance]
+    ★ 5  Rudy (1993)  [Drama]
+    ★ 5  Braveheart (1995)  [Action|Drama|War]
+    ★ 5  Predator (1987)  [Action|Sci-Fi|Thriller]
+    ★ 5  Fast Times at Ridgemont High (1982)  [Comedy]
+
+  Релевантные в тесте (17 шт):
+    ✓ Moonstruck (1987)
+    ✓ Four Weddings and a Funeral (1994)
+    ✓ Abyss, The (1989)
+    ✓ Say Anything... (1989)
+    ✓ Shanghai Noon (2000)
+
+   №  User-Based                | Item-Based                | Гибрид                   
+  ──  ───────────────────────── | ───────────────────────── | ─────────────────────────
+   1   For Love of the Game (1  |  Babe: Pig in the City (  |  High Noon (1952)        
+   2   American Graffiti (1973  |  Time to Kill, A (1996)   |  Stalag 17 (1953)        
+   3   Caddyshack (1980)        |  Man Without a Face, The  |  Patton (1970)           
+   4   Everything You Always W  |  Mr. Holland's Opus (199  |  Man Who Would Be King,  
+   5  ✓Star Wars: Episode V -   |  Legends of the Fall (19  |  Ben-Hur (1959)          
+   6  ✓Raiders of the Lost Ark  |  Karate Kid, The (1984)   | ✓Boat, The (Das Boot) (1 
+   7   Better Off Dead... (198  |  Far and Away (1992)      |  Great Escape, The (1963 
+   8   Matrix, The (1999)       |  Robin Hood: Prince of T  |  To Kill a Mockingbird ( 
+   9   Young Frankenstein (197  |  River Runs Through It,   |  Spartacus (1960)        
+  10   Saving Private Ryan (19  |  Crimson Tide (1995)      |  Casablanca (1942)       
+
+  Пересечение UB∩IB: 0 фильмов
+  В гибриде из UB: 0, из IB: 0
+
+───────────────────────────────────────────────────────────────────────────
+  ПОЛЬЗОВАТЕЛЬ 1245
+───────────────────────────────────────────────────────────────────────────
+
+  Высоко оцененные фильмы (train):
+    ★ 5  Star Trek: The Wrath of Khan (1982)  [Action|Adventure|Sci-Fi]
+    ★ 5  Close Encounters of the Third Kind (1977)  [Drama|Sci-Fi]
+    ★ 5  Princess Bride, The (1987)  [Action|Adventure|Comedy|Romance]
+    ★ 5  2001: A Space Odyssey (1968)  [Drama|Mystery|Sci-Fi|Thriller]
+    ★ 5  Terminator 2: Judgment Day (1991)  [Action|Sci-Fi|Thriller]
+
+  Релевантные в тесте (6 шт):
+    ✓ Twelve Monkeys (1995)
+    ✓ Matrix, The (1999)
+    ✓ Brazil (1985)
+    ✓ Terminator, The (1984)
+    ✓ Star Wars: Episode VI - Return of the Jedi (1983)
+
+   №  User-Based                | Item-Based                | Гибрид                   
+  ──  ───────────────────────── | ───────────────────────── | ─────────────────────────
+   1   Absent Minded Professor  |  Casablanca (1942)        |  Omen, The (1976)        
+   2  ✓Alien (1979)             |  Bridge on the River Kwa  |  Field of Dreams (1989)  
+   3   Navigator: A Mediaeval   |  Lawrence of Arabia (196  |  Lawrence of Arabia (196 
+   4   Alien Nation (1988)      |  Citizen Kane (1941)      |  Vertigo (1958)          
+   5   Toy Story (1995)         |  Rear Window (1954)       |  Goldfinger (1964)       
+   6   Local Hero (1983)        |  Manchurian Candidate, T  |  American Graffiti (1973 
+   7   Producers, The (1968)    |  Vertigo (1958)           |  Caddyshack (1980)       
+   8   Clerks (1994)            |  Annie Hall (1977)        |  Citizen Kane (1941)     
+   9   Casablanca (1942)        |  Some Like It Hot (1959)  |  This Is Spinal Tap (198 
+  10   Rudy (1993)              |  North by Northwest (195  |  Young Frankenstein (197 
+
+  Пересечение UB∩IB: 1 фильмов
+  В гибриде из UB: 0, из IB: 3
+
+===========================================================================
+  ДЕМОНСТРАЦИЯ НА КОНКРЕТНЫХ ПОЛЬЗОВАТЕЛЯХ
+===========================================================================
+
+───────────────────────────────────────────────────────────────────────────
+  ПОЛЬЗОВАТЕЛЬ 1996
+───────────────────────────────────────────────────────────────────────────
+
+  Высоко оцененные фильмы (train):
+    ★ 5  Godfather, The (1972)  [Action|Crime|Drama]
+    ★ 5  Boy Who Could Fly, The (1986)  [Drama|Fantasy]
+    ★ 5  Indian in the Cupboard, The (1995)  [Adventure|Children's|Fantasy]
+    ★ 5  Raising Arizona (1987)  [Comedy]
+    ★ 5  Face/Off (1997)  [Action|Sci-Fi|Thriller]
+
+  Релевантные в тесте (29 шт):
+    ✓ Toy Story (1995)
+    ✓ Heat (1995)
+    ✓ Die Hard (1988)
+    ✓ James and the Giant Peach (1996)
+    ✓ Fly, The (1986)
+
+   №  User-Based                | Item-Based                | Гибрид                   
+  ──  ───────────────────────── | ───────────────────────── | ─────────────────────────
+   1   Sunset Blvd. (a.k.a. Su  |  Borrowers, The (1997)    |  No Way Out (1987)       
+   2   Lawrence of Arabia (196  |  Mouse Hunt (1997)        |  Sunset Blvd. (a.k.a. Su 
+   3   Manchurian Candidate, T  |  Fly Away Home (1996)     |  Third Man, The (1949)   
+   4   Seven Samurai (The Magn  |  Raging Bull (1980)       |  Rear Window (1954)      
+   5   Perfect Blue (1997)      |  Do the Right Thing (198  |  Scent of a Woman (1992) 
+   6   Man on the Moon (1999)   |  North by Northwest (195  |  Stalag 17 (1953)        
+   7   Seven Days in May (1964  |  Rear Window (1954)       |  Last Picture Show, The  
+   8   Aliens (1986)            |  Network (1976)           |  Lawrence of Arabia (196 
+   9  ✓Saving Private Ryan (19  |  Blue Velvet (1986)       |  Casablanca (1942)       
+  10   Schindler's List (1993)  |  Blood Simple (1984)      |  Bridge on the River Kwa 
+
+  Пересечение UB∩IB: 0 фильмов
+  В гибриде из UB: 2, из IB: 1
+
+───────────────────────────────────────────────────────────────────────────
+  ПОЛЬЗОВАТЕЛЬ 1129
+───────────────────────────────────────────────────────────────────────────
+
+  Высоко оцененные фильмы (train):
+    ★ 5  Titanic (1997)  [Drama|Romance]
+    ★ 5  Rudy (1993)  [Drama]
+    ★ 5  Braveheart (1995)  [Action|Drama|War]
+    ★ 5  Predator (1987)  [Action|Sci-Fi|Thriller]
+    ★ 5  Fast Times at Ridgemont High (1982)  [Comedy]
+
+  Релевантные в тесте (17 шт):
+    ✓ Moonstruck (1987)
+    ✓ Four Weddings and a Funeral (1994)
+    ✓ Abyss, The (1989)
+    ✓ Say Anything... (1989)
+    ✓ Shanghai Noon (2000)
+
+   №  User-Based                | Item-Based                | Гибрид                   
+  ──  ───────────────────────── | ───────────────────────── | ─────────────────────────
+   1   For Love of the Game (1  |  Babe: Pig in the City (  |  High Noon (1952)        
+   2   American Graffiti (1973  |  Time to Kill, A (1996)   |  Stalag 17 (1953)        
+   3   Caddyshack (1980)        |  Man Without a Face, The  |  Patton (1970)           
+   4   Everything You Always W  |  Mr. Holland's Opus (199  |  Man Who Would Be King,  
+   5  ✓Star Wars: Episode V -   |  Legends of the Fall (19  |  Ben-Hur (1959)          
+   6  ✓Raiders of the Lost Ark  |  Karate Kid, The (1984)   | ✓Boat, The (Das Boot) (1 
+   7   Better Off Dead... (198  |  Far and Away (1992)      |  Great Escape, The (1963 
+   8   Matrix, The (1999)       |  Robin Hood: Prince of T  |  To Kill a Mockingbird ( 
+   9   Young Frankenstein (197  |  River Runs Through It,   |  Spartacus (1960)        
+  10   Saving Private Ryan (19  |  Crimson Tide (1995)      |  Casablanca (1942)       
+
+  Пересечение UB∩IB: 0 фильмов
+  В гибриде из UB: 0, из IB: 0
+
+───────────────────────────────────────────────────────────────────────────
+  ПОЛЬЗОВАТЕЛЬ 1245
+───────────────────────────────────────────────────────────────────────────
+
+  Высоко оцененные фильмы (train):
+    ★ 5  Star Trek: The Wrath of Khan (1982)  [Action|Adventure|Sci-Fi]
+    ★ 5  Close Encounters of the Third Kind (1977)  [Drama|Sci-Fi]
+    ★ 5  Princess Bride, The (1987)  [Action|Adventure|Comedy|Romance]
+    ★ 5  2001: A Space Odyssey (1968)  [Drama|Mystery|Sci-Fi|Thriller]
+    ★ 5  Terminator 2: Judgment Day (1991)  [Action|Sci-Fi|Thriller]
+
+  Релевантные в тесте (6 шт):
+    ✓ Twelve Monkeys (1995)
+    ✓ Matrix, The (1999)
+    ✓ Brazil (1985)
+    ✓ Terminator, The (1984)
+    ✓ Star Wars: Episode VI - Return of the Jedi (1983)
+
+   №  User-Based                | Item-Based                | Гибрид                   
+  ──  ───────────────────────── | ───────────────────────── | ─────────────────────────
+   1   Absent Minded Professor  |  Casablanca (1942)        |  Omen, The (1976)        
+   2  ✓Alien (1979)             |  Bridge on the River Kwa  |  Field of Dreams (1989)  
+   3   Navigator: A Mediaeval   |  Lawrence of Arabia (196  |  Lawrence of Arabia (196 
+   4   Alien Nation (1988)      |  Citizen Kane (1941)      |  Vertigo (1958)          
+   5   Toy Story (1995)         |  Rear Window (1954)       |  Goldfinger (1964)       
+   6   Local Hero (1983)        |  Manchurian Candidate, T  |  American Graffiti (1973 
+   7   Producers, The (1968)    |  Vertigo (1958)           |  Caddyshack (1980)       
+   8   Clerks (1994)            |  Annie Hall (1977)        |  Citizen Kane (1941)     
+   9   Casablanca (1942)        |  Some Like It Hot (1959)  |  This Is Spinal Tap (198 
+  10   Rudy (1993)              |  North by Northwest (195  |  Young Frankenstein (197 
+
+  Пересечение UB∩IB: 1 фильмов
+  В гибриде из UB: 0, из IB: 3
+
+===========================================================================
+  ОЦЕНКА КАЧЕСТВА: USER-BASED vs ITEM-BASED vs HYBRID
+===========================================================================
+Генерация рекомендаций...
