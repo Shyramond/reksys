@@ -1,0 +1,144 @@
+Loaded 1495 Steam games from steam_top_games_2026.csv
+Base feature matrix: 1495 items x 7028 dimensions
+Content feature matrix: 1495 items x 7052 dimensions
+
+Raw KNN on item metadata
+------------------------
+Precision@K: 0.1665
+Recall@K  : 0.0087
+NDCG@K    : 0.1654
+MRR@K     : 0.2802
+
+Content-based KNN with image features
+-------------------------------------
+Precision@K: 0.1695
+Recall@K  : 0.0091
+NDCG@K    : 0.1674
+MRR@K     : 0.2812
+
+SVD KNN with 20 components
+--------------------------
+Precision@K: 0.1610
+Recall@K  : 0.0097
+NDCG@K    : 0.1657
+MRR@K     : 0.3072
+
+SVD KNN with 50 components
+--------------------------
+Precision@K: 0.1590
+Recall@K  : 0.0087
+NDCG@K    : 0.1639
+MRR@K     : 0.3038
+
+SVD KNN with 100 components
+---------------------------
+Precision@K: 0.1600
+Recall@K  : 0.0088
+NDCG@K    : 0.1646
+MRR@K     : 0.3021
+
+Best SVD dimension by NDCG@K: 20
+
+Hybrid SVD-first -> full refinement -> content personalization
+--------------------------------------------------------------
+Precision@K: 0.4400
+Recall@K  : 0.0361
+NDCG@K    : 0.4462
+MRR@K     : 0.5877
+
+Hybrid content-first -> full refinement -> personalization
+----------------------------------------------------------
+Precision@K: 0.2380
+Recall@K  : 0.0158
+NDCG@K    : 0.2480
+MRR@K     : 0.4247
+
+Combined SVD + image content KNN
+--------------------------------
+Precision@K: 0.1600
+Recall@K  : 0.0095
+NDCG@K    : 0.1645
+MRR@K     : 0.3008
+
+Saved comparison results to steam_knn_svd_comparison.csv
+
+Example seed games and hidden tags:
+1. Risen 3 - Titan Lords (hidden tag: rpg)
+2. Battle Realms: Zen Edition (hidden tag: strategy)
+3. F.E.A.R. (hidden tag: horror)
+4. Clicker Heroes (hidden tag: clicker)
+5. Valkyria Chronicles™ (hidden tag: anime)
+
+Recommendation examples for the first query:
+Seed: Risen 3 - Titan Lords, hidden tag: rpg
+Raw neighbors:
+  - God of War | tags=Action, Singleplayer, Story Rich, Mythology, Adventure, Combat, Third Person, RPG, Hack and Slash, Violent
+  - Deus Ex: Human Revolution - Director's Cut | tags=Cyberpunk, Stealth, RPG, Sci-fi, FPS, Action, Singleplayer, Story Rich, Great Soundtrack, Transhumanism
+  - Bayonetta | tags=Action, Female Protagonist, Hack and Slash, Sexual Content, Nudity, Singleplayer, Spectacle fighter, Mature, Great Soundtrack, Character Action Game
+  - Like a Dragon: Infinite Wealth | tags=Action, JRPG, Adventure, Turn-Based Combat, Sexual Content, Comedy, Story Rich, Singleplayer, Emotional, Funny
+  - Crysis | tags=FPS, Action, Sci-fi, Singleplayer, Shooter, Stealth, Open World, Aliens, First-Person, Benchmark
+  - Mass Effect (2007) | tags=RPG, Sci-fi, Story Rich, Action, Space, Third-Person Shooter, Singleplayer, Choices Matter, Great Soundtrack, Third Person
+  - Deus Ex: Game of the Year Edition | tags=Cyberpunk, RPG, Stealth, Classic, Immersive Sim, FPS, Sci-fi, Cult Classic, Action, Singleplayer
+  - Fallout: A Post Nuclear Role Playing Game | tags=RPG, Post-apocalyptic, Classic, Open World, Isometric, Turn-Based, Turn-Based Combat, Singleplayer, Sci-fi, Atmospheric
+  - Assassin’s Creed® Brotherhood | tags=Action, Open World, Adventure, Parkour, Stealth, Assassin, Third Person, Historical, Multiplayer, Singleplayer
+  - Sekiro™: Shadows Die Twice - GOTY Edition | tags=Souls-like, Difficult, Action, Singleplayer, Ninja, Stealth, Adventure, Third Person, Open World, Story Rich
+
+Content-based neighbors:
+  - God of War | tags=Action, Singleplayer, Story Rich, Mythology, Adventure, Combat, Third Person, RPG, Hack and Slash, Violent
+  - Like a Dragon: Infinite Wealth | tags=Action, JRPG, Adventure, Turn-Based Combat, Sexual Content, Comedy, Story Rich, Singleplayer, Emotional, Funny
+  - Deus Ex: Human Revolution - Director's Cut | tags=Cyberpunk, Stealth, RPG, Sci-fi, FPS, Action, Singleplayer, Story Rich, Great Soundtrack, Transhumanism
+  - Crysis | tags=FPS, Action, Sci-fi, Singleplayer, Shooter, Stealth, Open World, Aliens, First-Person, Benchmark
+  - Mass Effect (2007) | tags=RPG, Sci-fi, Story Rich, Action, Space, Third-Person Shooter, Singleplayer, Choices Matter, Great Soundtrack, Third Person
+  - Bayonetta | tags=Action, Female Protagonist, Hack and Slash, Sexual Content, Nudity, Singleplayer, Spectacle fighter, Mature, Great Soundtrack, Character Action Game
+  - Deus Ex: Game of the Year Edition | tags=Cyberpunk, RPG, Stealth, Classic, Immersive Sim, FPS, Sci-fi, Cult Classic, Action, Singleplayer
+  - Fallout: A Post Nuclear Role Playing Game | tags=RPG, Post-apocalyptic, Classic, Open World, Isometric, Turn-Based, Turn-Based Combat, Singleplayer, Sci-fi, Atmospheric
+  - Assassin’s Creed® Brotherhood | tags=Action, Open World, Adventure, Parkour, Stealth, Assassin, Third Person, Historical, Multiplayer, Singleplayer
+  - Sekiro™: Shadows Die Twice - GOTY Edition | tags=Souls-like, Difficult, Action, Singleplayer, Ninja, Stealth, Adventure, Third Person, Open World, Story Rich
+
+Combined SVD+image-content neighbors:
+  - Crysis | tags=FPS, Action, Sci-fi, Singleplayer, Shooter, Stealth, Open World, Aliens, First-Person, Benchmark
+  - Deus Ex: Human Revolution - Director's Cut | tags=Cyberpunk, Stealth, RPG, Sci-fi, FPS, Action, Singleplayer, Story Rich, Great Soundtrack, Transhumanism
+  - Like a Dragon: Infinite Wealth | tags=Action, JRPG, Adventure, Turn-Based Combat, Sexual Content, Comedy, Story Rich, Singleplayer, Emotional, Funny
+  - Mass Effect (2007) | tags=RPG, Sci-fi, Story Rich, Action, Space, Third-Person Shooter, Singleplayer, Choices Matter, Great Soundtrack, Third Person
+  - Deus Ex: Game of the Year Edition | tags=Cyberpunk, RPG, Stealth, Classic, Immersive Sim, FPS, Sci-fi, Cult Classic, Action, Singleplayer
+  - Bayonetta | tags=Action, Female Protagonist, Hack and Slash, Sexual Content, Nudity, Singleplayer, Spectacle fighter, Mature, Great Soundtrack, Character Action Game
+  - Fallout: A Post Nuclear Role Playing Game | tags=RPG, Post-apocalyptic, Classic, Open World, Isometric, Turn-Based, Turn-Based Combat, Singleplayer, Sci-fi, Atmospheric
+  - God of War | tags=Action, Singleplayer, Story Rich, Mythology, Adventure, Combat, Third Person, RPG, Hack and Slash, Violent
+  - Crysis Warhead® | tags=FPS, Action, Sci-fi, Shooter, Singleplayer, Multiplayer, Aliens, First-Person, Military, Stealth
+  - Bionic Commando: Rearmed | tags=Action, Platformer, Remake, Local Co-Op, Great Soundtrack, Local Multiplayer, Retro, 2D, Old School, Co-op
+
+SVD (20) neighbors:
+  - Crysis | tags=FPS, Action, Sci-fi, Singleplayer, Shooter, Stealth, Open World, Aliens, First-Person, Benchmark
+  - Deus Ex: Human Revolution - Director's Cut | tags=Cyberpunk, Stealth, RPG, Sci-fi, FPS, Action, Singleplayer, Story Rich, Great Soundtrack, Transhumanism
+  - Bayonetta | tags=Action, Female Protagonist, Hack and Slash, Sexual Content, Nudity, Singleplayer, Spectacle fighter, Mature, Great Soundtrack, Character Action Game
+  - Deus Ex: Game of the Year Edition | tags=Cyberpunk, RPG, Stealth, Classic, Immersive Sim, FPS, Sci-fi, Cult Classic, Action, Singleplayer
+  - Like a Dragon: Infinite Wealth | tags=Action, JRPG, Adventure, Turn-Based Combat, Sexual Content, Comedy, Story Rich, Singleplayer, Emotional, Funny
+  - Mass Effect (2007) | tags=RPG, Sci-fi, Story Rich, Action, Space, Third-Person Shooter, Singleplayer, Choices Matter, Great Soundtrack, Third Person
+  - Fallout: A Post Nuclear Role Playing Game | tags=RPG, Post-apocalyptic, Classic, Open World, Isometric, Turn-Based, Turn-Based Combat, Singleplayer, Sci-fi, Atmospheric
+  - God of War | tags=Action, Singleplayer, Story Rich, Mythology, Adventure, Combat, Third Person, RPG, Hack and Slash, Violent
+  - Tom Clancy's Rainbow Six® Vegas | tags=Action, FPS, Tactical, Co-op, Singleplayer, Multiplayer, Shooter, First-Person, Classic, Online Co-Op
+  - Bionic Commando: Rearmed | tags=Action, Platformer, Remake, Local Co-Op, Great Soundtrack, Local Multiplayer, Retro, 2D, Old School, Co-op
+
+SVD (50) neighbors:
+  - Crysis | tags=FPS, Action, Sci-fi, Singleplayer, Shooter, Stealth, Open World, Aliens, First-Person, Benchmark
+  - Deus Ex: Human Revolution - Director's Cut | tags=Cyberpunk, Stealth, RPG, Sci-fi, FPS, Action, Singleplayer, Story Rich, Great Soundtrack, Transhumanism
+  - Bayonetta | tags=Action, Female Protagonist, Hack and Slash, Sexual Content, Nudity, Singleplayer, Spectacle fighter, Mature, Great Soundtrack, Character Action Game
+  - Like a Dragon: Infinite Wealth | tags=Action, JRPG, Adventure, Turn-Based Combat, Sexual Content, Comedy, Story Rich, Singleplayer, Emotional, Funny
+  - Deus Ex: Game of the Year Edition | tags=Cyberpunk, RPG, Stealth, Classic, Immersive Sim, FPS, Sci-fi, Cult Classic, Action, Singleplayer
+  - Mass Effect (2007) | tags=RPG, Sci-fi, Story Rich, Action, Space, Third-Person Shooter, Singleplayer, Choices Matter, Great Soundtrack, Third Person
+  - God of War | tags=Action, Singleplayer, Story Rich, Mythology, Adventure, Combat, Third Person, RPG, Hack and Slash, Violent
+  - Fallout: A Post Nuclear Role Playing Game | tags=RPG, Post-apocalyptic, Classic, Open World, Isometric, Turn-Based, Turn-Based Combat, Singleplayer, Sci-fi, Atmospheric
+  - Tom Clancy's Rainbow Six® Vegas | tags=Action, FPS, Tactical, Co-op, Singleplayer, Multiplayer, Shooter, First-Person, Classic, Online Co-Op
+  - Bionic Commando: Rearmed | tags=Action, Platformer, Remake, Local Co-Op, Great Soundtrack, Local Multiplayer, Retro, 2D, Old School, Co-op
+
+SVD (100) neighbors:
+  - Crysis | tags=FPS, Action, Sci-fi, Singleplayer, Shooter, Stealth, Open World, Aliens, First-Person, Benchmark
+  - Deus Ex: Human Revolution - Director's Cut | tags=Cyberpunk, Stealth, RPG, Sci-fi, FPS, Action, Singleplayer, Story Rich, Great Soundtrack, Transhumanism
+  - Bayonetta | tags=Action, Female Protagonist, Hack and Slash, Sexual Content, Nudity, Singleplayer, Spectacle fighter, Mature, Great Soundtrack, Character Action Game
+  - Deus Ex: Game of the Year Edition | tags=Cyberpunk, RPG, Stealth, Classic, Immersive Sim, FPS, Sci-fi, Cult Classic, Action, Singleplayer
+  - Like a Dragon: Infinite Wealth | tags=Action, JRPG, Adventure, Turn-Based Combat, Sexual Content, Comedy, Story Rich, Singleplayer, Emotional, Funny
+  - Mass Effect (2007) | tags=RPG, Sci-fi, Story Rich, Action, Space, Third-Person Shooter, Singleplayer, Choices Matter, Great Soundtrack, Third Person
+  - God of War | tags=Action, Singleplayer, Story Rich, Mythology, Adventure, Combat, Third Person, RPG, Hack and Slash, Violent
+  - Bionic Commando: Rearmed | tags=Action, Platformer, Remake, Local Co-Op, Great Soundtrack, Local Multiplayer, Retro, 2D, Old School, Co-op
+  - Tom Clancy's Rainbow Six® Vegas | tags=Action, FPS, Tactical, Co-op, Singleplayer, Multiplayer, Shooter, First-Person, Classic, Online Co-Op
+  - Fallout: A Post Nuclear Role Playing Game | tags=RPG, Post-apocalyptic, Classic, Open World, Isometric, Turn-Based, Turn-Based Combat, Singleplayer, Sci-fi, Atmospheric

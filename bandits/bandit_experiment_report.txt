@@ -1,0 +1,43 @@
+LinUCB Bandit Re-ranker Experiment Report
+================================================
+
+Hyperparameters:
+  - alpha: 1.0
+  - SVD dimensions: 20
+  - iterations: 1000
+  - stage-2 candidate pool: 50
+  - final top-K: 10
+
+Final Metrics:
+  - cumulative reward: 483
+  - average bandit Precision@10: 0.4489
+  - average static Precision@10: 0.4882
+  - exploration rate: 0.9780
+  - bandit top-1 hit rate: 0.4830
+  - static top-1 hit rate: 0.4710
+
+Key Findings:
+  - LinUCB reranked the top-50 hybrid candidates using arm-specific contextual scoring.
+  - The experiment compares the static hybrid model against the hybrid+LinUCB re-ranker.
+  - Exploration is measured as cases where the bandit selected a different top-1 game than the static hybrid model.
+  - The bandit is rewarded when the selected recommendation shares the seed game's hidden tag.
+
+Performance summary every 100 iterations:
+Iteration | CumulativeReward | BanditPrec | StaticPrec | ExplorationRate | BanditTop1HR | StaticTop1HR
+------------------------------------------------------------------------------------------------
+      100 |               42 | 0.4300 | 0.4930 | 0.9800 | 0.4200 | 0.4700
+      200 |               90 | 0.4630 | 0.5175 | 0.9900 | 0.4500 | 0.5100
+      300 |              129 | 0.4410 | 0.4943 | 0.9800 | 0.4300 | 0.4833
+      400 |              178 | 0.4427 | 0.4890 | 0.9800 | 0.4450 | 0.4600
+      500 |              226 | 0.4352 | 0.4746 | 0.9720 | 0.4520 | 0.4520
+      600 |              279 | 0.4457 | 0.4822 | 0.9750 | 0.4650 | 0.4683
+      700 |              325 | 0.4420 | 0.4796 | 0.9757 | 0.4643 | 0.4571
+      800 |              375 | 0.4437 | 0.4840 | 0.9775 | 0.4688 | 0.4612
+      900 |              431 | 0.4488 | 0.4873 | 0.9778 | 0.4789 | 0.4644
+     1000 |              483 | 0.4489 | 0.4882 | 0.9780 | 0.4830 | 0.4710
+
+Hit rate improvement (bandit top-1 vs static top-1): 0.0120
+
+Observations:
+  - If the bandit hit rate exceeds the static hit rate, the re-ranker improves stage-3 recommendations.
+  - A non-zero exploration rate shows the bandit actively tries alternatives beyond the hybrid model's first choice.
