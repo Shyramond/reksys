@@ -128,7 +128,6 @@ class RecommenderEvaluator:
         mean_jacc = float(np.mean(sims)) if sims else 0.0
         return 1.0 - mean_jacc
 
-    # ------------------ Evaluation flow ------------------
     def evaluate(self,
                  test_queries: Sequence,
                  recommendation_engine: Callable[[int, int], Sequence[int]],
@@ -241,13 +240,10 @@ def _example_usage():
         spec.loader.exec_module(sk)
         df = pd.read_csv(Path(__file__).resolve().parent / 'SVD+CB' / 'steam_top_games_2026.csv')
         df, vectorizer, X_text, X_img, X_extra, X_base, X_content, numeric, bool_columns, owner_columns = sk.build_feature_matrix(df)
-        # build a simple wrapper that calls the hybrid recommender
         def engine(seed_idx, k=10):
             return sk.sequential_svd_then_refine_then_content(seed_idx, None, X_text, X_content, X_img, df, top_k=k)
-        # popularity counts: here use tag occurrences as proxy (replace with interaction counts)
         pop = {i: max(1, len(str(r.get('tags','')).split(','))) for i, r in df.iterrows()}
         evaluator = RecommenderEvaluator(full_feature_matrix=X_content, item_popularity=pop, item_index=list(df.index))
-        # build queries
         candidate_indices = list(range(len(df)))[:200]
         queries = []
         for idx in candidate_indices:
