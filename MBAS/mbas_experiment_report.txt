@@ -1,0 +1,50 @@
+Multi-Bandit Arm Selection (MBAS) Report
+==================================================
+
+Hyperparameters:
+  - alpha: 1.0
+  - iterations: 1000
+  - top-K: 10
+  - number of arms: 7
+
+Arms (Recommender Systems):
+  0: Raw_KNN
+  1: Content_KNN
+  2: SVD_20
+  3: SVD_50
+  4: SVD_100
+  5: Hybrid_SVD_First
+  6: Hybrid_Content_First
+
+Final Results:
+  - Total Iterations: 1000
+  - Cumulative Reward: 433
+
+Per-Arm Performance:
+  Arm Name                   | Hits | Trials | Hit Rate
+  ------------------------------------------------------------
+  Raw_KNN                     |   42 |    109 | 0.3853
+  Content_KNN                 |  315 |    705 | 0.4468
+  SVD_20                      |    0 |      2 | 0.0000
+  SVD_50                      |    0 |      2 | 0.0000
+  SVD_100                     |    0 |      2 | 0.0000
+  Hybrid_SVD_First            |   76 |    172 | 0.4419
+  Hybrid_Content_First        |    0 |      3 | 0.0000
+
+Key Findings:
+  - Best performing arm: Content_KNN (hit rate: 0.4468)
+  - LinUCB adaptively selected between different recommender systems.
+  - The bandit learned which system performs best across test queries.
+
+Sample History (every 100 iterations):
+Iteration | CumulativeReward | SelectedArm
+      100 |               51 | Content_KNN
+      200 |               97 | Content_KNN
+      300 |              140 | Content_KNN
+      400 |              176 | Hybrid_SVD_First
+      500 |              217 | Content_KNN
+      600 |              258 | Content_KNN
+      700 |              300 | Content_KNN
+      800 |              347 | Content_KNN
+      900 |              393 | Content_KNN
+     1000 |              433 | Raw_KNN

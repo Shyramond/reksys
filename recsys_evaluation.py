@@ -1,15 +1,3 @@
-"""Offline evaluation utilities for recommender experiments.
-
-Provides accuracy/ranking metrics and beyond-accuracy metrics (coverage, novelty,
-intra-list diversity, personalization). Intended to work with the SVD+Content
-hybrid recommender in this workspace.
-
-Usage example (see bottom of file for runnable example):
-  from recsys_evaluation import RecommenderEvaluator
-  evaluator = RecommenderEvaluator(full_feature_matrix=X_content, item_popularity=pop_counts, item_index=list_of_item_ids)
-  results = evaluator.evaluate(test_queries, recommendation_engine=my_hybrid_fn, k=10)
-  evaluator.write_report(results, "offline_evaluation_report.txt")
-"""
 from __future__ import annotations
 
 from typing import Callable, Iterable, List, Optional, Sequence, Tuple, Dict
@@ -32,11 +20,6 @@ def _safe_mean(xs):
 
 class RecommenderEvaluator:
     def __init__(self, full_feature_matrix, item_popularity: Optional[Dict[int, float]] = None, item_index: Optional[Sequence[int]] = None):
-        """
-        full_feature_matrix: ndarray or sparse matrix (n_items x n_features) used for ILD
-        item_popularity: mapping item_id -> interaction count (raw counts)
-        item_index: optional list mapping row indices in full_feature_matrix to global item ids
-        """
         self.X = full_feature_matrix
         self.item_popularity = item_popularity or {}
         self.item_index = list(item_index) if item_index is not None else None
@@ -44,7 +27,6 @@ class RecommenderEvaluator:
         total = sum(self.item_popularity.values()) if self.item_popularity else 0
         self._total_interactions = total if total > 0 else 0
 
-    # ------------------ Basic ranking metrics ------------------
     def precision_at_k(self, recs: Sequence[int], relevant: set, k: int) -> float:
         if not recs:
             return 0.0
@@ -82,13 +64,11 @@ class RecommenderEvaluator:
                 return 1.0 / rank
         return 0.0
 
-    # ------------------ Beyond-accuracy metrics ------------------
     def catalog_coverage(self, all_recommendations: Sequence[Sequence[int]], n_items: Optional[int] = None) -> float:
         unique = set()
         for rec in all_recommendations:
             unique.update(rec)
         if n_items is None:
-            # try to infer from feature matrix rows
             try:
                 n_items = int(self.X.shape[0])
             except Exception:
@@ -96,13 +76,11 @@ class RecommenderEvaluator:
         return len(unique) / n_items if n_items > 0 else 0.0
 
     def novelty_self_information(self, recs: Sequence[int]) -> float:
-        # average self-information across recommended items
         vals = []
         V = len(self.item_popularity) if self.item_popularity else 0
         total = self._total_interactions if self._total_interactions > 0 else 0
         for item in recs:
             count = self.item_popularity.get(item, 0)
-            # add-one smoothing to avoid zero prob
             if total > 0 and V > 0:
                 p = (count + 1) / (total + V)
             else:
@@ -112,11 +90,9 @@ class RecommenderEvaluator:
         return float(np.mean(vals)) if vals else 0.0
 
     def ild(self, recs: Sequence[int]) -> float:
-        # intra-list diversity: mean pairwise cosine distance between items in recs
         k = len(recs)
         if k <= 1:
             return 0.0
-        # extract rows from feature matrix
         rows = []
         for item in recs:
             idx = item if self.item_index is None else (self.item_index.index(item) if item in self.item_index else None)
@@ -132,12 +108,10 @@ class RecommenderEvaluator:
         if len(rows) <= 1:
             return 0.0
         M = np.vstack(rows)
-        # pdist with 'cosine' returns 1 - cosine_similarity
         dists = distance.pdist(M, metric='cosine')
         return float(np.mean(dists))
 
     def personalization(self, all_recommendations: Sequence[Sequence[int]]) -> float:
-        # personalization = 1 - average pairwise Jaccard similarity across recommendation lists
         lists = [list(r) for r in all_recommendations]
         n = len(lists)
         if n <= 1:
@@ -195,7 +169,6 @@ class RecommenderEvaluator:
                 'ild': ild_v,
             })
 
-        # aggregated
         metrics = {
             'precision': _safe_mean([p['precision'] for p in per_query]),
             'recall': _safe_mean([p['recall'] for p in per_query]),
@@ -227,14 +200,12 @@ class RecommenderEvaluator:
         lines.append(f"  Coverage    : {metrics['catalog_coverage']:.4f}")
         lines.append(f"  Personaliz. : {metrics['personalization']:.4f}")
         lines.append('')
-        # brief analysis
         lines.append('Analysis:')
         if metrics['ild'] < 0.1 and metrics['precision'] > 0.15:
             lines.append('  - Model achieves good accuracy but low diversity: trade-off observed.')
         else:
             lines.append('  - No strong evidence of sacrificing diversity for accuracy on these queries.')
         lines.append('')
-        # per-query sample table (first 10)
         lines.append('Per-query sample (first 10):')
         lines.append('seed | precision | recall | map | ndcg | mrr | novelty | ild')
         for pq in metrics['per_query'][:10]:
@@ -245,7 +216,6 @@ class RecommenderEvaluator:
     def plot_long_tail(self, metrics: Dict, out_path: str = 'long_tail_coverage.png') -> None:
         if plt is None:
             return
-        # count how often each item appears in all recommendations
         all_recs = metrics.get('all_recs', [])
         flat = [i for rec in all_recs for i in rec]
         if not flat:
@@ -264,7 +234,6 @@ class RecommenderEvaluator:
 
 
 def _example_usage():
-    # This example expects that you adapt the paths and the recommendation_engine
     try:
         import importlib.util as iu, sys
         spec = iu.spec_from_file_location('sk', Path(__file__).resolve().parent / 'SVD+CB' / 'steam_knn_svd.py')
