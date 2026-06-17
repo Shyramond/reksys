@@ -23,7 +23,6 @@ class RecommenderEvaluator:
         self.X = full_feature_matrix
         self.item_popularity = item_popularity or {}
         self.item_index = list(item_index) if item_index is not None else None
-        # compute total interactions and smoothing for novelty
         total = sum(self.item_popularity.values()) if self.item_popularity else 0
         self._total_interactions = total if total > 0 else 0
 
@@ -99,7 +98,6 @@ class RecommenderEvaluator:
             if idx is None:
                 continue
             row = self.X[idx]
-            # support sparse
             try:
                 arr = row.toarray().ravel()
             except Exception:
@@ -133,12 +131,6 @@ class RecommenderEvaluator:
                  recommendation_engine: Callable[[int, int], Sequence[int]],
                  k: int = 10,
                  build_relevant_fn: Optional[Callable[[int], set]] = None) -> Dict:
-        """
-        test_queries: sequence of seed item ids or (seed_idx, relevant_set) tuples
-        recommendation_engine: function(seed_idx, k) -> ranked list of item ids
-        build_relevant_fn: optional function(seed_idx) -> set of relevant item ids
-        Returns aggregated metrics and per-query records
-        """
         per_query = []
         all_recs = []
         for q in test_queries:

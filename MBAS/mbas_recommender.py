@@ -1,11 +1,3 @@
-"""Multi-Bandit Arm Selection (MBAS) for Recommender Systems
-
-Uses LinUCB to adaptively select the best recommender model/configuration
-across multiple iterations based on exploration-exploitation trade-off.
-
-Each "arm" is a different recommender system (Raw KNN, Content-based, SVD with different dims, Hybrid variants).
-"""
-
 import importlib.util
 import os
 import re
@@ -127,7 +119,6 @@ def build_recommender_arms(module, df, vectorizer, X_text, X_img, X_extra, X_bas
 
         arms[f"SVD_{dim}"] = make_svd_recommend(svd_knn, svd, X_reduced)
 
-    # Build full feature matrix: text + numeric + bool + owner (for refinement step)
     X_full = module.sparse.hstack([X_text, X_extra], format="csr")
     X_full = module.normalize(X_full, norm="l2", axis=1)
 
